@@ -1,0 +1,11 @@
+services:
+  postgres:
+    image: postgres
+    container_name: postgres-dev-db
+    ports:
+      - "5432:5432"
+    restart: always
+    environment:
+      POSTGRES_DB: dev-db
+      POSTGRES_USER: root
+      POSTGRES_PASSWORD: root
