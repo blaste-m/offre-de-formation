@@ -24,8 +24,8 @@ public class TpConceptionSiApplication implements CommandLineRunner {
     @Override
     public void run(String... args) {
         System.out.println("Bienvenue dans Offre de Formation");
-        System.out.println("Entrer 'help' pour afficher la liste de commandes ou 'quit' pour quitter");
-        System.out.println("Entrer votre commande");
+        System.out.println("Enter 'help' to display available commands or 'quit' to exit");
+        System.out.println("Enter a command:");
 
         while (true) {
             System.out.print("> ");
@@ -42,6 +42,5 @@ public class TpConceptionSiApplication implements CommandLineRunner {
             System.out.println(output);
 
         }
-
     }
 }
