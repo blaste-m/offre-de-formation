@@ -12,10 +12,16 @@ import java.util.Set;
 @AllArgsConstructor
 @Table(name = "année")
 public class Year {
-    @Id
-    private String id;
+    @EmbeddedId
+    private YearId id;
 
     @ManyToOne
     private Degree degree;
+
+    public Year(int year, Degree degree) {
+        this.degree = degree;
+        this.id.setYear(year);
+        this.id.setDegree(degree.getName());
+    }
 
 }
