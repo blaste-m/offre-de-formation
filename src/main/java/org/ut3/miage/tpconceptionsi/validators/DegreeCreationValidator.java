@@ -2,7 +2,7 @@ package org.ut3.miage.tpconceptionsi.validators;
 
 import org.ut3.miage.tpconceptionsi.requests.DegreeCreationRequest;
 
-public class DegreeValidator {
+public class DegreeCreationValidator {
 
     public void validate(DegreeCreationRequest request) throws IllegalArgumentException {
         validateMaxEtu(request.maxEtu());

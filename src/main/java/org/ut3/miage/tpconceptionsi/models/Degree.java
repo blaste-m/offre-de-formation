@@ -25,4 +25,13 @@ public class Degree {
     private int maxEtu;
     private int ects;
 
+    @Override
+    public String toString() {
+        return "{ " +
+                "name='" + name + '\'' +
+                ", type=" + type.toString() +
+                ", maxEtu=" + maxEtu +
+                ", ects=" + ects +
+                " }";
+    }
 }
