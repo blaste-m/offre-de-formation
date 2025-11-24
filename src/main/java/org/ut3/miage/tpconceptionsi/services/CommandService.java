@@ -13,12 +13,12 @@ public class CommandService {
 
     private final DegreeService degreeService;
 
-    public String analyze(String s) {
+    public String parse(String s) {
 
         if (s == null || s.trim().isEmpty())
             return "[ Empty command ] Enter 'help' for available commands, or 'quit' to exit";
 
-        String[] input = s.split("\\s+", -1);
+        String[] input = s.split("\\s+");
 
         Command[] commands = Command.values();
         if (!Arrays.toString(commands).contains(input[0])) return "Unknown command " + input[0];
@@ -37,7 +37,7 @@ public class CommandService {
             case CREATE :
                 switch ( keyword ) {
                     case DEGREE :
-                        return degreeService.createDegree(args);
+                        return degreeService.create(args);
                 }
 
             default :
