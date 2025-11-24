@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.ut3.miage.tpconceptionsi.enums.Command;
 import org.ut3.miage.tpconceptionsi.enums.Keyword;
+import org.ut3.miage.tpconceptionsi.models.Year;
 
 import java.util.Arrays;
 
@@ -37,7 +38,14 @@ public class CommandService {
             case CREATE :
                 switch ( keyword ) {
                     case DEGREE :
-                        return degreeService.create(args);
+                        return degreeService.createDegree(args);
+                }
+            case SELECT :
+                switch ( keyword ) {
+                    case DEGREE :
+                        return degreeService.selectDegree(args);
+                    case YEAR :
+                        return degreeService.selectYear(args);
                 }
 
             default :
