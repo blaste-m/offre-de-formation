@@ -1,10 +1,9 @@
-package org.ut3.miage.tpconceptionsi.utils;
+package org.ut3.miage.tpconceptionsi.utils.ue;
 
 import org.ut3.miage.tpconceptionsi.models.UE;
 
-public class UEFactory implements AbstractFactory<UE> {
+public class UEFactory {
 
-    @Override
     public UE create(String... args) {
 
         if (args.length != 5) {
@@ -15,13 +14,13 @@ public class UEFactory implements AbstractFactory<UE> {
             );
         }
 
-        String nom = args[0];
+        String name = args[0];
         int ects = getEcts(args);
         int cm = getCm(args);
         int td = getTd(args);
         int tp = getTp(args);
 
-        return new UE(nom, ects, cm, td, tp);
+        return new UE(name);
     }
 
 
