@@ -1,11 +1,13 @@
 package org.ut3.miage.tpconceptionsi.parsers;
 
+import org.springframework.stereotype.Component;
 import org.ut3.miage.tpconceptionsi.enums.DegreeType;
 import org.ut3.miage.tpconceptionsi.models.Degree;
 import org.ut3.miage.tpconceptionsi.requests.DegreeCreationRequest;
 
 import java.util.Arrays;
 
+@Component
 public class DegreeArgumentParser {
 
     public DegreeCreationRequest parseCreateDegree(String... args) throws IllegalArgumentException {

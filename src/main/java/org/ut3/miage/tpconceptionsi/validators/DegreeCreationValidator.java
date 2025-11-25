@@ -1,7 +1,9 @@
 package org.ut3.miage.tpconceptionsi.validators;
 
+import org.springframework.stereotype.Component;
 import org.ut3.miage.tpconceptionsi.requests.DegreeCreationRequest;
 
+@Component
 public class DegreeCreationValidator {
 
     public void validate(DegreeCreationRequest request) throws IllegalArgumentException {
