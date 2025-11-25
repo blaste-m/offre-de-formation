@@ -5,8 +5,6 @@ public record UECreationRequest(
         int ects,
         int cm,
         int td,
-        int tp,
-        String degreeName,
-        int year
+        int tp
 ) {
 }

@@ -18,7 +18,11 @@ public class Year {
     @ManyToOne
     private Degree degree;
 
+    @ManyToMany
+    private Set<UE> ues;
+
     public Year(int year, Degree degree) {
+        this.id = new YearId();
         this.degree = degree;
         this.id.setYear(year);
         this.id.setDegree(degree.getName());

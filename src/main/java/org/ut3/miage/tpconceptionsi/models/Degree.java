@@ -1,11 +1,14 @@
 package org.ut3.miage.tpconceptionsi.models;
 
 import jakarta.persistence.*;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.ut3.miage.tpconceptionsi.enums.DegreeType;
 
-import java.util.HashSet;
-import java.util.Set;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Getter @Setter
@@ -20,7 +23,7 @@ public class Degree {
     private DegreeType type;
 
     @OneToMany(mappedBy = "degree", cascade = CascadeType.ALL, orphanRemoval = true)
-    private Set<Year> years = new HashSet<>();
+    private List<Year> years = new ArrayList<>();
 
     private int maxEtu;
     private int ects;

@@ -5,16 +5,17 @@ import org.ut3.miage.tpconceptionsi.models.Degree;
 import org.ut3.miage.tpconceptionsi.models.Year;
 import org.ut3.miage.tpconceptionsi.models.YearId;
 
+import java.util.ArrayList;
 import java.util.HashSet;
 
 public class MasterDegree {
 
     public Degree create(String name, int maxEtu) {
 
-        Degree degree = new Degree(name, DegreeType.MASTER, new HashSet<>(), maxEtu, 120);
+        Degree degree = new Degree(name, DegreeType.MASTER, new ArrayList<>(), maxEtu, 120);
 
-        for (int i = 0; i < 2; i++) {
-            Year year = new Year(new YearId(degree.getName(), i + 1), degree);
+        for (int i = 1; i <= 2; i++) {
+            Year year = new Year(i, degree);
             degree.getYears().add(year);
         }
 

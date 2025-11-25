@@ -4,6 +4,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.ut3.miage.tpconceptionsi.enums.Command;
 import org.ut3.miage.tpconceptionsi.enums.Keyword;
+import org.ut3.miage.tpconceptionsi.models.Degree;
+import org.ut3.miage.tpconceptionsi.models.UE;
 import org.ut3.miage.tpconceptionsi.models.Year;
 
 import java.util.Arrays;
@@ -12,7 +14,11 @@ import java.util.Arrays;
 @RequiredArgsConstructor
 public class CommandService {
 
+    private final UEService ueService;
     private final DegreeService degreeService;
+
+    private Degree currentDegree;
+    private Year currentYear;
 
     public String parse(String s) {
 
@@ -29,7 +35,9 @@ public class CommandService {
 
         Keyword[] keywords = command.getKeywords();
         if (!Arrays.toString(keywords).contains(input[1]))
-            return "The command " + command + " must be followed by one of these keywords: " + Arrays.toString(keywords);
+            return "The command " + command + " must be followed by one of these keywords: "
+                    + Arrays.toString(keywords);
+
         Keyword keyword = Keyword.valueOf(input[1]);
 
         String[] args = Arrays.copyOfRange(input, 2, input.length);
@@ -38,14 +46,46 @@ public class CommandService {
             case CREATE :
                 switch ( keyword ) {
                     case DEGREE :
-                        return degreeService.createDegree(args);
+                        try {
+                            Degree degree = degreeService.createDegree(args);
+                            return "Degree created: " + degree.getName();
+                        } catch (Exception e) {
+                            return e.getMessage();
+                        }
+                    case UE :
+                        try {
+                            UE ue = ueService.createUE(currentYear, args);
+                            return "UE " + ue.getName() + " has been associated with year "
+                                    + currentYear.getId().getYear() + " of degree " + currentYear.getDegree().getName();
+                        } catch (Exception e) {
+                            return e.getMessage();
+                        }
                 }
             case SELECT :
                 switch ( keyword ) {
                     case DEGREE :
-                        return degreeService.selectDegree(args);
+                        try {
+                            this.currentDegree = degreeService.selectDegree(args);
+
+                            this.currentYear = currentDegree.getYears()
+                                    .stream().findFirst()
+                                    .orElseThrow(() -> new IllegalStateException("Degree " + currentDegree.getName() + " has no years"));
+
+                            return "Degree selected: " + currentDegree + " [default year:  " + currentYear.getId().getYear() + "]";
+                        } catch (Exception e) {
+                            return e.getMessage();
+                        }
                     case YEAR :
-                        return degreeService.selectYear(args);
+                        try {
+                            if (currentDegree == null)
+                                return "No degree selected. Please select a degree first";
+
+                            this.currentYear = degreeService.selectYear(currentDegree, args);
+                            return "Year " + currentYear.getId().getYear()
+                                    + " selected for degree " + currentDegree.getName();
+                        } catch (Exception e) {
+                            return e.getMessage();
+                        }
                 }
 
             default :

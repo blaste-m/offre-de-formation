@@ -1,7 +1,10 @@
 package org.ut3.miage.tpconceptionsi.services;
 
+import lombok.Getter;
 import lombok.RequiredArgsConstructor;
+import org.hibernate.Hibernate;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.ut3.miage.tpconceptionsi.models.Degree;
 import org.ut3.miage.tpconceptionsi.models.Year;
 import org.ut3.miage.tpconceptionsi.models.YearId;
@@ -12,66 +15,56 @@ import org.ut3.miage.tpconceptionsi.requests.DegreeCreationRequest;
 import org.ut3.miage.tpconceptionsi.utils.degree.DegreeFactory;
 import org.ut3.miage.tpconceptionsi.validators.DegreeCreationValidator;
 
+
 @Service
 @RequiredArgsConstructor
 public class DegreeService {
-    private final DegreeRepository degreeRepository;
     private final YearRepository yearRepository;
-    private final DegreeFactory factory = new DegreeFactory();
-    private final DegreeArgumentParser parser = new DegreeArgumentParser();
-    private final DegreeCreationValidator validator = new DegreeCreationValidator();
+    private final DegreeRepository degreeRepository;
+    private final DegreeFactory factory;
+    private final DegreeArgumentParser parser;
+    private final DegreeCreationValidator validator;
 
-    public Degree degree = null;
-    public Year year = null;
-
-    public String createDegree(String... args) {
-        try {
+    public Degree createDegree(String... args) {
             DegreeCreationRequest request = parser.parseCreateDegree(args);
             validator.validate(request);
 
             Degree degree = factory.create(request);
-            degreeRepository.save(degree);
 
-            return "Degree created: " + degree.getName();
-        } catch (IllegalArgumentException e) {
-            return e.getMessage();
-        } catch (Exception e) {
-            return "Error while creating degree: " + e.getMessage();
-        }
+            if (degreeRepository.existsById(degree.getName())) {
+                throw new IllegalArgumentException("Degree " + degree.getName() + " already exists");
+            }
+
+            return degreeRepository.save(degree);
     }
 
+    @Transactional
+    public Degree selectDegree(String... args) {
 
-    public String selectDegree(String... args) {
-
-        try {
             String degreeName = parser.parseSelectDegree(args);
-            degree = degreeRepository.findById(degreeName)
+
+            Degree degree = degreeRepository.findById(degreeName)
                     .orElseThrow(() -> new IllegalArgumentException("Degree " + degreeName + " not found"));
 
-            return "Degree selected: " + degree.toString();
-        } catch (IllegalArgumentException e) {
-            return e.getMessage();
-        } catch (Exception e) {
-            return "Error while selecting degree: " + e.getMessage();
-        }
+            Hibernate.initialize(degree.getYears());
+
+            return degree;
+
     }
 
-    public String selectYear(String... args) {
+    @Transactional(readOnly = true)
+    public Year selectYear(Degree degree, String... args) {
 
-        try {
-            if (degree == null)
-                return "No degree selected. Please select a degree first";
+        int yearNumber = parser.parseSelectYear(degree, args);
 
-            int yearNumber = parser.parseSelectYear(degree, args);
+        YearId yearId = new YearId(degree.getName(), yearNumber);
 
-            year = yearRepository.findById(new YearId(degree.getName(), yearNumber)).get();
+        Year year = yearRepository.findById(yearId)
+                .orElseThrow(() -> new IllegalArgumentException("Year " + yearNumber + " not found for degree " + degree.getName()));
 
-            return "Year " + yearNumber + " selected for degree " + degree.getName();
-        } catch (IllegalArgumentException e) {
-            return e.getMessage();
-        } catch (Exception e) {
-            return "Error while selecting year: " + e.getMessage();
-        }
+        Hibernate.initialize(year.getUes());
+
+        return year;
 
     }
 }
