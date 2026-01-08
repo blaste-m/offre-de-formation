@@ -11,21 +11,25 @@ import java.util.Arrays;
 public class DegreeArgumentParser {
 
     public DegreeCreationRequest parseCreateDegree(String... args) throws IllegalArgumentException {
-        if (args.length != 3)
+        if (args.length != 5)
             throw new IllegalArgumentException(
                     "Wrong number of arguments for command CREATE DEGREE"
-                            + "\nExpected 3 arguments but got " + (args.length)
-                            + "\nUsage : CREATE DEGREE <name> <type> <max etu>"
+                            + "\nExpected 5 arguments but got " + (args.length)
+                            + "\nUsage : CREATE DEGREE <name> <type> <year> <max etu> <ects>"
             );
 
         String name = args[0];
         DegreeType type = getType(args);
-        int maxEtu = getMaxEtu(args);
+        int year = getIntArg("year", 2, args);
+        int maxEtu = getIntArg("max etu", 3, args);
+        int ects = getIntArg("ects", 4, args);
 
         return new DegreeCreationRequest(
                 type,
                 name,
-                maxEtu
+                year,
+                maxEtu,
+                ects
         );
     }
 
@@ -80,11 +84,11 @@ public class DegreeArgumentParser {
         }
     }
 
-    private int getMaxEtu(String... args) throws IllegalArgumentException {
-        try { return Integer.parseInt(args[2]); }
+    private int getIntArg(String name, int pos, String... args) {
+        try { return Integer.parseInt(args[pos]); }
         catch (NumberFormatException e) {
-            throw new IllegalArgumentException("Invalid argument <max etu>"
-                    + "\n<max etu> must be an integer"
+            throw new IllegalArgumentException("Invalid argument <" + name + ">"
+                    + "\n<" + name + "> must be an integer"
             );
         }
     }

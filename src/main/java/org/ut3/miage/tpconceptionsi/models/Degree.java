@@ -7,14 +7,14 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.ut3.miage.tpconceptionsi.enums.DegreeType;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @Getter @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name="diplôme")
+@IdClass(DegreeId.class)
 public class Degree {
     @Id
     private String name;
@@ -22,11 +22,15 @@ public class Degree {
     @Enumerated(EnumType.STRING)
     private DegreeType type;
 
-    @OneToMany(mappedBy = "degree", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Year> years = new ArrayList<>();
+    @Id
+    private int year;
 
     private int maxEtu;
+
     private int ects;
+
+    @ManyToMany(cascade = CascadeType.PERSIST)
+    private Set<UE> ues = new HashSet<>();
 
     @Override
     public String toString() {

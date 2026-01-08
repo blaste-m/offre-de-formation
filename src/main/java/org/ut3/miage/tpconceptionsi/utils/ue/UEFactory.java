@@ -17,6 +17,6 @@ public class UEFactory {
         int td = request.td();
         int tp = request.tp();
 
-        return new UE(name, ects, cm, td, tp, new HashSet<>());
+        return new UE(name, ects, cm, td, tp, new HashSet<>(), new HashSet<>());
     }
 }

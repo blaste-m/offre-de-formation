@@ -5,6 +5,8 @@ import org.ut3.miage.tpconceptionsi.enums.DegreeType;
 import org.ut3.miage.tpconceptionsi.models.Degree;
 import org.ut3.miage.tpconceptionsi.requests.DegreeCreationRequest;
 
+import java.util.HashSet;
+
 @Component
 public class DegreeFactory {
 
@@ -13,12 +15,16 @@ public class DegreeFactory {
         String name = request.name();
         DegreeType type = request.type();
         int maxEtu = request.maxEtu();
+        int year = request.year();
+        int ects = request.ects();
 
-        return switch (type) {
-            case BUT -> new BUTDegree().create(name, maxEtu);
-            case MASTER -> new MasterDegree().create(name, maxEtu);
-            case LICENCE -> new LicenceDegree().create(name, maxEtu);
-            case LICENCE_PRO -> new LicenceProDegree().create(name, maxEtu);
-        };
+        return new Degree(
+                name,
+                type,
+                year,
+                maxEtu,
+                ects,
+                new HashSet<>()
+        );
     }
 }

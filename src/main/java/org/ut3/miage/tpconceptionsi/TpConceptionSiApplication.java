@@ -20,8 +20,8 @@ public class TpConceptionSiApplication implements CommandLineRunner {
 
     @Override
     public void run(String... args) {
-        System.out.println("Bienvenue dans Offre de Formation");
-        System.out.println("Enter 'help' to display available commands or 'quit' to exit");
+        System.out.println("Welcome to the Degree Management Application!");
+        System.out.println("Enter 'help' to display available commands or 'exit' to exit");
         System.out.println("Enter a command:");
 
         Scanner scanner = new Scanner(System.in);
@@ -30,7 +30,7 @@ public class TpConceptionSiApplication implements CommandLineRunner {
             System.out.print("> ");
             String input = scanner.nextLine();
 
-            if (input.equals("quit")) {
+            if (input.equalsIgnoreCase("exit")) {
                 System.out.println("Application exited");
                 break;
             }
